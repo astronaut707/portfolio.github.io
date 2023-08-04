@@ -1,0 +1,538 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Deforestation Project</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">Portfolio</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<div class="inner">
+							<h2>Menu</h2>
+							<ul class="links">
+								<li><a href="index.html">Home</a></li>
+							</ul>
+							<a href="#" class="close">Close</a>
+						</div>
+					</nav>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Deforestation Project</h2>
+							</div>
+						</header>
+
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">								
+
+									<h3 class="major">Report for ForestQuery into Global Deforestation, 1990 to 2016</h3>
+									<p><span class="image left"><img src="images/forest1.jpg" alt="" /></span>ForestQuery is on a mission to combat deforestation around the world and to raise awareness about this topic and its impact on the environment. The data analysis team at ForestQuery has obtained data from the World Bank that includes forest area and total land area by country and year from 1990 to 2016, as well as a table of countries and the regions to which they belong.</p>
+
+									<p>The data analysis team has used SQL to bring these tables together and to query them in an effort to find areas of concern as well as areas that present an opportunity to learn from successes.</p>
+									<h4>View</h4>
+										<pre><code>
+<b>DROP VIEW IF EXISTS</b> forestation;
+<b>CREATE VIEW</b> forestation <b>AS</b>
+(<b>SELECT</b> f.country_code, f.country_name, r.region, f.year, f.forest_area_sqkm, 
+ l.total_area_sq_mi*2.59 total_area_sqkm, r.income_group
+<b>FROM</b> forest_area f
+<b>JOIN</b> land_area l
+	<b>ON</b> f.country_code = l.country_code
+	<b>AND</b> f.country_name = l.country_name
+	<b>AND</b> f.year = l.year
+<b>JOIN</b> regions r
+	<b>ON</b> f.country_code = r.country_code
+	<b>AND</b> f.country_name = r.country_name)
+										</code></pre>
+
+										<div class="box alt">
+											<div class="row gtr-uniform">
+												<div class="col-12"><span class="image fit"><img src="images/forest2.jpg" alt="" /></span></div>
+											</div>
+										</div>
+
+									<h3 class="major">GLOBAL SITUATION</h3>
+									<p>According to the World Bank, the total forest area of the world was <i>41 282 695 km2</i> in 1990. As of 2016, the most recent year for which data was available, that number had fallen to 
+										<i>39 958 246 km2</i>, a loss of <i>1 324 449 km2</i>, or <i>3.2%</i>.</p>
+									
+									<p>The forest area lost over this time period is slightly more than the entire land area of <i>Peru</i> listed for the year 2016 (which is <i>1 280 000 km2</i>).</p>
+									<h4>Square km of forest by years</h4>
+										<pre><code>
+<b>SELECT</b> year, <i>ROUND</i>(forest_area_sqkm::numeric,0) sqkm_of_forest
+<b>FROM</b> forest_area
+<b>WHERE</b> country_name = 'World'
+<b>ORDER BY</b> year </b>DESC</b>											
+										</code></pre>
+									<h4>Difference in square km between 2016 and 1990</h4>
+									<pre><code>
+WITH sqkm AS
+(<b>SELECT</b> year, <i>ROUND</i>(forest_area_sqkm::numeric,0) sqkm_of_forest
+<b>FROM</b> forest_area
+<b>WHERE</b> country_name = 'World'
+<b>ORDER BY</b> year </b>DESC</b>)
+										  
+<b>SELECT</b>
+(<b>SELECT</b> sqkm_of_forest
+<b>FROM</b> sqkm
+<b>WHERE</b> year = 1990)
+-
+(<b>SELECT</b> sqkm_of_forest
+<b>FROM</b> sqkm
+<b>WHERE</b> year = 2016)
+<b>AS</b> difference
+<b>FROM</b> sqkm
+<b>LIMIT</b> 1																				  
+									</code></pre>
+									<h4>Difference in % between 2016 and 1990</h4>
+									<pre><code>
+<b>WITH</b> sqkm <b>AS</b>
+	(<b>SELECT</b> year, <i>ROUND</i>(SUM(forest_area_sqkm)::numeric,0) sqkm_of_forest
+	<b>FROM</b> forest_area
+	<b>GROUP BY</b> year
+	<b>ORDER BY</b> year)
+										  
+<b>SELECT</b>
+	((<b>SELECT</b> sqkm_of_forest
+	<b>FROM</b> sqkm
+	b>WHERE</b> year = 1990)
+	-
+	(<b>SELECT</b> sqkm_of_forest
+	<b>FROM</b> sqkm
+	<b>WHERE</b> year = 2016))
+	/
+	(<b>SELECT</b> sqkm_of_forest
+	<b>FROM</b> sqkm
+	<b>WHERE</b> year = 1990) <b>AS</b> present
+<b>FROM</b> sqkm
+<b>LIMIT</b> 1
+									  
+									</code></pre>
+									<h4>Land area = deforested area</h4>
+									<pre><code>
+<b>WITH</b> sqkm <b>AS</b>
+	(<b>SELECT</b> year, <i>ROUND</i>(SUM(forest_area_sqkm)::numeric,0) sqkm_of_forest
+	<b>FROM</b> forest_area
+	<b>GROUP BY</b> year
+	<b>ORDER BY</b> year),
+										
+land <b>AS</b>
+(<b>SELECT</b> country_name, year, total_area_sq_mi*2.59 total_area_sqkm
+<b>FROM</b> land_area
+<b>WHERE</b> year = 2016)
+									  
+<b>SELECT</b> country_name, <i>ROUND</i>(total_area_sqkm::numeric,0)
+<b>FROM</b> land
+<b>WHERE</b> total_area_sqkm <=
+(<b>SELECT</b>
+	(<b>SELECT</b> sqkm_of_forest
+	<b>FROM</b> sqkm
+	<b>WHERE</b> year = 1990)
+	-
+	(<b>SELECT</b> sqkm_of_forest
+	<b>FROM</b> sqkm
+		<b>WHERE</b> year = 2016)
+	<b>AS</b> difference
+<b>FROM</b> sqkm
+<b>LIMIT</b> 1)
+<b>ORDER BY</b> total_area_sqkm </b>DESC</b>
+<b>LIMIT</b> 1									  
+									</code></pre>
+
+									<div class="box alt">
+										<div class="row gtr-uniform">
+											<div class="col-12"><span class="image fit"><img src="images/forest3.jpg" alt="" /></span></div>
+										</div>
+									</div>
+
+									<h3 class="major">REGIONAL OUTLOOK</h3>
+									<p>In 2016, the percent of the total land area of the world designated as forest was <i>39 958 246 km2</i>. The region with the highest relative forestation was <i>Latin America & Caribbean</i>, with <i>46.2%</i>, and the region with the lowest relative forestation was <i>Middle East & North Africa</i>, with <i>2.07%</i> forestation.</p>
+
+									<p>In 1990, the percent of the total land area of the world designated as forest was <i>41 282 695 km2</i>. The region with the highest relative forestation was <i>Latin America & Caribbean</i>, with <i>51%</i>, and the region with the lowest relative forestation was <i>Middle East & North Africa</i>, with <i>1.8%</i> forestation.</p>
+									
+									<h4>Percent Forest Area by Region, 1990 & 2016:</h4>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>Region</th>
+													<th>1990 Forest Percentage (%)</th>
+													<th>2016 Forest Percentage (%)</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Latin America & Caribbean</td>
+													<td>51.03</td>
+													<td>46.16</td>
+												</tr>
+												<tr>
+													<td>Europe & Central Asia</td>
+													<td>37.3</td>
+													<td>38.06</td>
+												</tr>
+												<tr>
+													<td>North America</td>
+													<td>35.65</td>
+													<td>36.04</td>
+												</tr>
+												<tr>
+													<td>Sub-Saharan Africa</td>
+													<td>32.19</td>
+													<td>28.72</td>
+												</tr>
+												<tr>
+													<td>East Asia & Pacific</td>
+													<td>25.57</td>
+													<td>26.29</td>
+												</tr>
+												<tr>
+													<td>South Asia</td>
+													<td>16.51</td>
+													<td>17.51</td>
+												</tr>
+												<tr>
+													<td>Middle East & North Africa</td>
+													<td>1.78</td>
+													<td>2.07</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<p>The only regions of the world that decreased in percent forest area from 1990 to 2016 were <i>Sub-Saharan Africa</i> (dropped from <i>32.19%</i> to <i>28.72%</i>) and <i>Latin America & Caribbean</i> (<i>51.03%</i> to <i>46.16%</i>). All other regions actually increased in forest area over this time period. However, the drop in forest area in the two aforementioned regions was so large, the percent forest area of the world decreased over this time period from <i>32.42%</i> to <i>31.38%</i>.</p>
+									<h4>Countries with the highest/lowest forest areas</h4>
+									<pre><code>
+<b>WITH</b> sixteen <b>AS</b>
+(<b>SELECT</b> r.region region, (<i>SUM</i>(f.forest_area_sqkm)*100)/<i>SUM</i>(l.total_area_sq_mi*2.59) forest
+<b>FROM</b> forest_area f
+<b>JOIN</b> land_area l
+	<b>ON</b> f.country_code = l.country_code
+		<b>AND</b> f.country_name = l.country_name
+		<b>AND</b> f.year = l.year
+<b>JOIN</b> regions r
+	<b>ON</b> f.country_code = r.country_code
+		<b>AND</b> f.country_name = r.country_name
+<b>WHERE</b> f.year = '2016'
+	<b>AND</b> f.forest_area_sqkm IS NOT NULL
+<b>GROUP BY</b> r.region
+<b>ORDER BY</b> 2 <b>DESC</b>),
+
+ninety <b>AS</b>
+(<b>SELECT</b> r.region region, (<i>SUM</i>(f.forest_area_sqkm)*100)/<i>SUM</i>(l.total_area_sq_mi*2.59) forest
+<b>FROM</b> forest_area f
+<b>JOIN</b> land_area l
+	<b>ON</b> f.country_code = l.country_code
+		<b>AND</b> f.country_name = l.country_name
+		<b>AND</b> f.year = l.year
+<b>JOIN</b> regions r
+	<b>ON</b> f.country_code = r.country_code
+		<b>AND</b> f.country_name = r.country_name
+<b>WHERE</b> f.year = '1990'
+	<b>AND</b> f.forest_area_sqkm IS NOT NULL
+<b>GROUP BY</b> r.region
+<b>ORDER BY</b> 2 <b>DESC</b>)
+
+<b>SELECT</b> s.region, <i>ROUND</i>(n.forest::numeric, 2) ninety, <i>ROUND</i>(s.forest::numeric, 2) sixteen
+<b>FROM</b> sixteen s
+<b>JOIN</b> ninety n
+	<b>ON</b> s.region = n.region																	  
+									</code></pre>
+
+									<div class="box alt">
+										<div class="row gtr-uniform">
+											<div class="col-12"><span class="image fit"><img src="images/forest4.jpg" alt="" /></span></div>
+										</div>
+									</div>
+
+									<h3 class="major">COUNTRY-LEVEL DETAIL</h3>
+									<h4>SUCCESS STORIES</h4>
+									<p><span class="image left"><img src="images/forest5.jpg" alt="" /></span>There is one particularly bright spot in the data at the country level, <i>China</i>. This country actually increased in forest area from 1990 to 2016 by <i>527 229 km2</i>. It would be interesting to study what has changed in this country over this time to drive this figure in the data higher. The country with the next largest increase in forest area from 1990 to 2016 was the <i>United States</i>, but it only saw an increase of <i>79 200 km2</i>, much lower than the figure for <i>China</i>.</p>
+									
+									<p><i>China</i> and <i>United States</i> are of course very large countries in total land area, so when we look at the largest percent change in forest area from 1990 to 2016, we aren’t surprised to find a much smaller country listed at the top. <i>Iceland</i> increased in forest area by <i>213%</i> from 1990 to 2016. </p>
+									
+									<h4>LARGEST CONCERNS</h4>
+									<p>Which countries are seeing deforestation to the largest degree? We can answer this question in two ways. First, we can look at the absolute square kilometer decrease in forest area from 1990 to 2016. The following 3 countries had the largest decrease in forest area over the time period under consideration:</p>
+									
+									<h4>Top 5 Amount Decrease in Forest Area by Country, 1990 & 2016:</h4>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>Country</th>
+													<th>Region</th>
+													<th>Absolute Forest Area Change</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Brazil</td>
+													<td>Latin America & Caribbean</td>
+													<td>541 510 km2</td>
+												</tr>
+												<tr>
+													<td>Indonesia</td>
+													<td>East Asia & Pacific</td>
+													<td>282 193 km2</td>
+												</tr>
+												<tr>
+													<td>Myanmar</td>
+													<td>East Asia & Pacific</td>
+													<td>107 234 km2</td>
+												</tr>
+												<tr>
+													<td>Nigeria</td>
+													<td>Sub-Saharan Africa</td>
+													<td>106 506 km2</td>
+												</tr>
+												<tr>
+													<td>Tanzania</td>
+													<td>Sub-Saharan Africa</td>
+													<td>102 320 km2</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<p>The second way to consider which countries are of concern is to analyze the data by percent decrease.</p>
+
+									<h4>Top 5 Percent Decrease in Forest Area by Country, 1990 & 2016:</h4>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>Country</th>
+													<th>Region</th>
+													<th>% Forest Area Change</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Togo</td>
+													<td>Sub-Saharan Africa</td>
+													<td>75%</td>
+												</tr>
+												<tr>
+													<td>Nigeria</td>
+													<td>Sub-Saharan Africa</td>
+													<td>61%</td>
+												</tr>
+												<tr>
+													<td>Uganda</td>
+													<td>Sub-Saharan Africa</td>
+													<td>59%</td>
+												</tr>
+												<tr>
+													<td>Mauritania</td>
+													<td>Sub-Saharan Africa</td>
+													<td>46%</td>
+												</tr>
+												<tr>
+													<td>Honduras</td>
+													<td>Latin America & Caribbean</td>
+													<td>45%</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<p>When we consider countries that decreased in forest area percentage the most between 1990 and 2016, we find that four of the top 5 countries on the list are in the region of <i>Sub-Saharan Africa</i>. The countries are <i>Togo</i>, <i>Nigeria</i>, <i>Uganda</i>, and <i>Mauritania</i>. The 5th country on the list is <i>Honduras</i>, which is in the <i>Latin America & Caribbean region</i>.</p>
+									
+									<h4>QUARTILES</h4>
+
+									<h4>Count of Countries Grouped by Forestation Percent Quartiles, 2016:</h4>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>Quartile</th>
+													<th>Number of Countries</th>													
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>4th quartile </td>
+													<td>9</td>
+												</tr>
+												<tr>
+													<td>3rd quartile </td>
+													<td>38</td>
+												</tr>
+												<tr>
+													<td>2nd quartile </td>
+													<td>72</td>
+												</tr>
+												<tr>
+													<td>1st quartile </td>
+													<td>85</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<p>The largest number of countries in 2016 were found in the <i>1st</i> quartile.</p>
+
+									<p>There were <i>9</i> countries in the top quartile in 2016. These are countries with a very high percentage of their land area designated as forest. The following is a list of countries and their respective forest land, denoted as a percentage.</p>
+									
+									<h4>Top Quartile Countries, 2016:</h4>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>Country</th>
+													<th>Region</th>
+													<th>% Designated as Forest</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Suriname</td>
+													<td>Latin America & Caribbean</td>
+													<td>98%</td>
+												</tr>
+												<tr>
+													<td>Micronesia, Fed. Sts.</td>
+													<td>East Asia & Pacific</td>
+													<td>92%</td>
+												</tr>
+												<tr>
+													<td>Gabon</td>
+													<td>Sub-Saharan Africa</td>
+													<td>90%</td>
+												</tr>
+												<tr>
+													<td>Seychelles</td>
+													<td>Sub-Saharan Africa</td>
+													<td>88%</td>
+												</tr>
+												<tr>
+													<td>Paulu</td>
+													<td>East Asia & Pacific</td>
+													<td>88%</td>
+												</tr>
+												<tr>
+													<td>American Samoa</td>
+													<td>East Asia & Pacific</td>
+													<td>87%</td>
+												</tr>
+												<tr>
+													<td>Guyana</td>
+													<td>Latin America & Caribbean</td>
+													<td>83%</td>
+												</tr>
+												<tr>
+													<td>Lao PDR</td>
+													<td>East Asia & Pacific</td>
+													<td>82%</td>
+												</tr>
+												<tr>
+													<td>Solomon Islands</td>
+													<td>East Asia & Pacific</td>
+													<td>77%</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<h4>QUARTILES</h4>
+									<pre><code>
+<b>WITH</b> sixteen <b>AS</b>
+(<b>SELECT</b> f.country_code code, f.country_name country, f.forest_area_sqkm forest, (l.total_area_sq_mi)*2.59 land
+<b>FROM</b> forest_area f
+<b>JOIN</b> land_area l
+	<b>ON</b> f.country_code = l.country_code
+		<b>AND</b> f.country_name = l.country_name
+		<b>AND</b> f.year = l.year
+<b>WHERE</b> f.year = 2016
+	<b>AND</b> f.forest_area_sqkm IS NOT NULL
+	<b>AND</b> f.country_name != 'World'
+<b>ORDER</b> BY 2 <b>DESC</b>),
+
+pct <b>AS</b>
+(<b>SELECT</b> s.country, r.region, (s.forest/s.land)*100 pct
+<b>FROM</b> sixteen s
+<b>JOIN</b> regions r
+	<b>ON</b> s.code = r.country_code
+<b>WHERE</b> (s.forest/s.land)*100 IS NOT NULL
+<b>ORDER</b> 2 <b>DESC</b>)
+
+<b>SELECT</b> <i>COUNT</i>(country),
+	<b>CASE</b>
+		<b>WHEN</b> pct > 75 <b>AND</b> pct <= 100 <b>THEN</b> ('4th quartile')
+		<b>WHEN</b> pct > 50 <b>AND</b> pct <= 75 <b>THEN</b>  ('3rd quartile')
+		<b>WHEN</b> pct > 25 <b>AND</b> pct <= 50 <b>THEN</b>  ('2nd quartile')
+		<b>WHEN</b> pct > 0 <b>AND</b> pct <= 25 <b>THEN</b>  ('1st quartile')
+		<b>ELSE</b> ('<0') <b>END</b> quartile
+<b>FROM</b> pct
+<b>WHERE</b> pct <i>IS NOT NULL</i>
+	<b>AND</b> country != 'World'
+<b>GROUP BY</b> 2
+<b>ORDER</b> 2 <b>DESC</b>
+									</code></pre>
+									<section class="features">
+										<article>
+											<a href="capstone.html" class="image"><img src="images/project2.jpeg" alt="" /></a>
+											<h3 class="major">Capstone Project</h3>
+											<a href="capstone.html" class="special">Learn more</a>
+										</article>
+										<article>
+											<a href="nyc.html" class="image"><img src="images/project3.jpg" alt="" /></a>
+											<h3 class="major">New York City short-term rental insights</h3>
+											<a href="nyc.html" class="special">Learn more</a>
+										</article>
+									</section>
+
+								</div>
+							</div>
+
+					</section>
+
+				<!-- Footer -->
+					<section id="footer">
+						<div class="inner">
+							<h2 class="major">Get in touch</h2>
+							<ul class="contact">
+								<li class="icon solid fa-envelope">samshilo7070@gmail.com</li>
+								<li class="icon brands fa-github"><a href="https://github.com/astronaut707">GitHub</a></li>
+								<li class="icon brands fa-linkedin"><a href="https://www.linkedin.com/in/semyon-shilovskii/">LinkedIn</a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; Untitled Inc. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

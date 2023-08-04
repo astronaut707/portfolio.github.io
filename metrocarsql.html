@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Metrocar SQL</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">Portfolio</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<div class="inner">
+							<h2>Menu</h2>
+							<ul class="links">
+								<li><a href="index.html">Home</a></li>
+							</ul>
+							<a href="#" class="close">Close</a>
+						</div>
+					</nav>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Metrocar Funnel data exploration with SQL</h2>
+							</div>
+						</header>
+
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<h3 class="major">How many times was the app downloaded?</h3>
+
+									<pre><code>
+<b>SELECT</b> <i>COUNT</i>(*)
+<b>FROM</b> app_downloads
+									</code></pre>
+
+									<h3 class="major">How many users signed up on the app?</h3>
+
+									<pre><code>
+<b>SELECT</b> <i>COUNT</i>(user_id)
+<b>FROM</b> signups
+									</code></pre>
+
+									<h3 class="major">How many rides were requested through the app?</h3>
+
+									<pre><code>
+<b>SELECT</b> <i>COUNT</i>(ride_id)
+<b>FROM</b> ride_requests
+									</code></pre>
+
+									<h3 class="major">How many rides were requested and completed through the app?</h3>
+
+									<pre><code>
+<b>SELECT</b> <i>COUNT</i>(request_ts) as request, <i>COUNT</i>(dropoff_ts) as completed
+<b>FROM</b> ride_requests
+									</code></pre>
+
+									<h3 class="major">How many rides were requested and how many unique users requested a ride?</h3>
+
+									<pre><code>
+<b>SELECT</b> <i>COUNT</i>(*) as total, <i>COUNT</i>(<i>DISTINCT</i> user_id) as unique_users
+<b>FROM</b> ride_requests
+									</code></pre>
+
+									<h3 class="major">What is the average time of a ride from pick up to drop off?</h3>
+
+									<pre><code>
+<b>SELECT</b> <i>AVG</i>(dropoff_ts - pickup_ts)
+<b>FROM</b> ride_requests
+									</code></pre>
+
+									<h3 class="major">How many rides were accepted by a driver?</h3>
+
+									<pre><code>
+<b>SELECT</b> <i>COUNT</i>(accept_ts)
+<b>FROM</b> ride_requests
+									</code></pre>
+
+									<h3 class="major">How many rides did we successfully collect payments and how much was collected?</h3>
+
+									<pre><code>
+<b>SELECT</b> <i>COUNT</i>(charge_status) as rides_num, <i>SUM</i>(purchase_amount_usd) as USD
+<b>FROM</b> transactions
+<b>WHERE</b> charge_status = 'Approved'
+									</code></pre>
+
+									<h3 class="major">How many ride requests happened on each platform?</h3>
+
+									<pre><code>
+<b>SELECT</b> a.platform, <i>COUNT</i>(r.ride_id)
+<b>FROM</b> ride_requests r
+<b>JOIN</b> signups s
+    <b>ON</b> s.user_id = r.user_id
+<b>JOIN</b> app_downloads a
+<b>ON</b> a.app_download_key = s.session_id
+<b>GROUP BY</b> 1
+									</code></pre>
+
+									<h3 class="major">10.	What is the drop-off from users signing up to users requesting a ride?</h3>
+
+									<pre><code>
+<b>SELECT</b> (<i>CAST</i>(<i>COUNT</i>(<i>DISTINCT</i> r.user_id) as <i>float</i>)/<i>CAST</i>(<i>COUNT</i>(<i>DISTINCT</i> s.user_id) as <i>float</i>))*100 as drop
+<b>FROM</b> ride_requests as r
+<b>FULL JOIN</b> signups s
+	<b>ON</b> s.user_id = r.user_id
+									</code></pre>
+
+									<h3 class="major">How many unique users completed a ride through the Metrocar app?</h3>
+
+									<pre><code>
+<b>SELECT</b> <i>COUNT</i>(*) as total, <i>COUNT</i>(<i>DISTINCT</i> user_id) as unique_users, <i>COUNT</i>(dropoff_ts)
+<b>FROM</b> ride_requests
+<b>WHERE</b> dropoff_ts <i>IS NOT NULL</i>
+									</code></pre>
+
+									<h3 class="major">Of the users that signed up on the app, what percentage these users requested a ride?</h3>
+
+									<pre><code>
+<b>SELECT</b> (<i>CAST</i>(<i>COUNT</i>(<i>DISTINCT</i> r.user_id) AS <i>float</i>)/<i>CAST</i>(<i>COUNT</i>(<i>DISTINCT</i> s.user_id) AS <i>float</i>))*100 as per
+<b>FROM</b> ride_requests r
+<b>FULL JOIN</b> signups s
+<b>ON</b> s.user_id = r.user_id
+									</code></pre>
+
+									<h3 class="major">Of the users that signed up on the app, what percentage these users completed a ride?</h3>
+
+									<pre><code>
+<b>WITH</b> user_dropoff <b>AS</b> (
+<b>SELECT</b> user_id, <b>MAX</b>(<b>CASE WHEN</b> dropoff_ts <b>IS NOT NULL THEN</b> 1 <b>ELSE</b> 0 <b>END</b>) AS dropoff
+<b>FROM</b> ride_requests
+<b>GROUP BY</b> 1)
+
+<b>SELECT</b> (<i>SUM</i>(u.dropoff)::<i>float</i>/<i>COUNT</i>(<i>DISTINCT</i> s.user_id)::<i>float</i>)*100 as per
+<b>FROM</b> signups s
+<b>FULL JOIN</b> user_dropoff u
+	<b>ON</b> u.user_id = s.user_id
+									</code></pre>
+
+									<h3 class="major">Using the percent of previous approach, what are the user-level conversion rates for the first 3 stages of the funnel?</h3>
+
+									<pre><code>
+<b>SELECT</b> (<i>COUNT</i>(<i>DISTINCT</i> s.user_id)::<i>float</i>/<i>COUNT</i>(a.app_download_key)::<i>float</i>)*100 as per
+<b>FROM</b> app_downloads a
+<b>FULL JOIN</b> signups s
+	<b>ON</b> a.app_download_key = s.session_id
+
+
+<b>SELECT</b> (<i>COUNT</i>(<i>DISTINCT</i> s.user_id)::<i>float</i>/<i>COUNT</i>(<i>DISTINCT</i> s.user_id)::<i>float</i>)*100 as per
+<b>FROM</b> signups s
+<b>FULL JOIN</b> ride_requests r
+	<b>ON</b> s.user_id = r.user_id
+									</code></pre>
+									
+									<section class="features">
+										<article>
+											<a href="metrocar.html" class="image"><img src="images/pic04.jpg" alt="" /></a>
+											<h3 class="major">Metrocar Funnel</h3>
+											<a href="metrocar.html" class="special">Return</a>
+										</article>
+										</article>
+									</section>
+
+								</div>
+							</div>
+
+					</section>
+
+				<!-- Footer -->
+					<section id="footer">
+						<div class="inner">
+							<h2 class="major">Get in touch</h2>
+							<ul class="contact">
+								<li class="icon solid fa-envelope"><a href="#">samshilo7070@gmail.com</a></li>
+								<li class="icon brands fa-github"><a href="https://github.com/astronaut707">GitHub</a></li>
+								<li class="icon brands fa-linkedin"><a href="https://www.linkedin.com/in/semyon-shilovskii/">LinkedIn</a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; Untitled Inc. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

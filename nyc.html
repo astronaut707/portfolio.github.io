@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>NYC rental insights</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">Portfolio</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<div class="inner">
+							<h2>Menu</h2>
+							<ul class="links">
+								<li><a href="index.html">Home</a></li>
+							</ul>
+							<a href="#" class="close">Close</a>
+						</div>
+					</nav>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>New York City short-term rental insights</h2>
+							</div>
+						</header>
+
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+									<p>In this presentation I conclude my findings regarding short-term rentals in New York. In presentation I explore questions as:</p>
+
+									<div class="col-6 col-12-medium">
+										<ul>
+											<li>What is most popular neighborhood in New York?</li>
+											<li>What is the average rental price for short-term rentals in New York City, and how does it vary by neighborhood and property type?</li>
+											<li>What are the most commonly rented property types on Airbnb in New York City, and how does this vary by neighborhood?</li>
+											<li>How has demand for short-term rentals in New York City changed over time, and are there any seasonal trends that could impact business decisions?</li>
+										</ul>
+									</div>
+
+									<p>Now I explain my findings with details question by question.</p>
+
+									<h3 class="major">What is most popular neighborhood in New York?</h3>
+
+									<div class="col-12"><span class="image fit"><img src="images/nyc1.png" alt="" /></span></div>
+
+									<p>My presentation gives bar graph which perfectly represent answer to the question. As you can see, most popular neighborhood in New York city is <font color="B9264C">Brooklyn</font>, then, with almost the same result goes <font color="D63961">Manhattan</font>, <font color="DC5376">Queens</font> with notable drop in popularity have the middle place, and last places <font color="E2718E">Bronx</font> and <font color="E78BA3">Staten Island</font> with 3-digit values.</p>
+
+									<p>To find an answer to this question I take all districts of New York from data base and count number of reviews written for rentals in the districts.</p>
+
+									
+
+									<h3 class="major">What is the average rental price for short-term rentals in New York City, and how does it vary by neighborhood and property type?</h3>
+
+									<div class="col-12"><span class="image fit"><img src="images/nyc2.png" alt="" /></span></div>
+
+									<p>On the slide in bubbles you can see average prices for three property’s types with <font color="7BCED7">cyan</font> as <font color="7BCED7">entire house or apartment</font>, <font color="F1B24C">orange</font> as <font color="F1B24C">private rooms</font> and <font color="FF6990">crimson</font> as <font color="FF6990">shared room</font>. Average across all district was, for <font color="7BCED7">entire home/apartment</font> <b>197.2$</b>, for <font color="F1B24C">private rooms</font> – <b>81.7$</b> and for <font color="FF6990">shared room</font> - <b>53.6$</b>.</p>
+									
+									<p>District with biggest average price was <font color="D63961">Manhattan</font>, and the lowest prices was <font color="E78BA3">Staten Island</font>.</p>
+
+									<p>This time I took average price for all types of rentals and sorted it by type and district.</p>
+
+
+									<h3 class="major">What are the most commonly rented property types on Airbnb in New York City, and how does this vary by neighborhood?</h3>
+
+									<div class="col-12"><span class="image fit"><img src="images/nyc3.png" alt="" /></span></div>
+
+									<p>I present to you another bar charts this time representing most commonly rented property type through districts. In all New York most commonly rented were <font color="7BCED7">entire houses or apartments</font>, and least rented were <font color="FF6990">shared rooms</font> with <font color="F1B24C">private rooms</font> in the middle.</p>
+
+									<p>But through out of districts this changes for example in <font color="DC5376">Queens</font> and <font color="E2718E">Bronx</font> <font color="F1B24C">private rooms</font> were more popular with <font color="7BCED7">entire houses</font> on the second place, and in <font color="E78BA3">Staten Island</font> values for <font color="FF6990">shared rooms</font> and for <font color="7BCED7">entire houses</font> are almost identical.</p>
+
+									<p>To find this answer I one more time used count of reviews to see which type of rentals had most reviews and then sorting it by district and rental type.</p>
+									
+									
+									<h3 class="major">How has demand for short-term rentals in New York City changed over time, and are there any seasonal trends that could impact business decisions?</h3>
+
+									<div class="col-12"><span class="image fit"><img src="images/nyc4.png" alt="" /></span></div>
+
+									<p>On this bar chart you looking how demand on rentals changes across the year, as you can see the peak of demand is in the <font color="F1B24C">summer</font>, specifically in <font color="F1B24C"><b>June</b></font>, and the lowest demand in <font color="7BCED7"><b>February</b></font>, seasonal trends for room types are coming in similar path, with different number of rents, most popular is <font color="D9C4EF">entire house</font> and the least is <font color="FFA8E5">shared rooms</font> like in previous graphs.</p>
+
+									<p>To analyze this question, I used count of reviews once again this time sorted by month.</p>
+
+
+									<h3 class="major">How do I get my results?</h3>
+
+									<p>I start with data cleaning, I had three data bases:</p>
+
+									<div class="col-6 col-12-medium">
+										<ul>
+											<li><h3>Prices</h3></li>
+												<p>I loaded prices.csv in python, then I got rid from word ‘dollar’ in prices column and make values in this column integers. After I delete outliers, all prices less then 0 and bigger than 4000. Then saved it.</p>
+												<pre><code>
+<font color="F59829">import</font> pandas <font color="F59829">as</font> pd
+
+price = pd.read_csv(<font color="C2DA4C">'path/prices.csv'</font>)
+
+<font color="#737373"># get rid of dollars word and make price column in integer type</font>
+price[<font color="C2DA4C">'price'</font>] = price[<font color="C2DA4C">'price'</font>].str.strip(<font color="C2DA4C">'dollars'</font>)
+price[<font color="C2DA4C">'price'</font>] = price[<font color="C2DA4C">'price'</font>].astype(<font color="C2DA4C">'int''</font>)
+
+<font color="#737373"># sorting, removing outliers</font>
+price = price.sort_values(by=[<font color="C2DA4C">'price'</font>], <font color="E088BA">axis</font>=<font color="00B5B3">0</font>, <font color="E088BA">ascending</font>=<font color="F59829">False</font>)
+price = price[price[<font color="C2DA4C">'price'</font>] < <font color="00B5B3">4000</font>]
+price = price[price[<font color="C2DA4C">'price'</font>] > <font color="00B5B3">0</font>]
+
+<font color="106391">print</font>(price.head())
+
+<font color="#737373"># Save changes</font>
+price.to_csv(<font color="C2DA4C">'path/prices.csv'</font>, <font color="E088BA">index</font>=<font color="F59829">False</font>)
+												</code></pre>
+											<li><h3>Room types</h3></li>
+												<p>Loaded room_types.xlsx, and made all data in room_type column unformal, with same letters size.</p>
+												<pre><code>
+<font color="F59829">import</font> pandas <font color="F59829">as</font> pd
+
+room = pd.read_excel(<font color="C2DA4C">'path/room_types.xlsx'</font>)
+
+<font color="#737373"># Cleaning room_type str</font>
+room[<font color="C2DA4C">'room_type'</font>] = room[<font color="C2DA4C">'room_type'</font>].str.title()
+<font color="106391">print</font>(room.info())
+<font color="106391">print</font>(room.head())
+
+<font color="#737373"># Save changes</font>
+room.to_excel(<font color="C2DA4C">'path/room_types.xlsx'</font>, <font color="E088BA">index</font>=<font color="F59829">False</font>)
+													
+												</code></pre>
+											<li><h3>Reviews</h3></li>
+												<p>Again, loaded document and formatted date column, with right date type.</p>
+												<pre><code>
+<font color="F59829">import</font> pandas <font color="F59829">as</font> pd
+
+reviews = pd.read_table(<font color="C2DA4C">'path/reviews.tsv'</font>)
+													
+<font color="#737373"># Replace data with easy to read format</font>
+reviews[<font color="C2DA4C">'last_review'</font>] = pd.to_datetime(reviews[<font color="C2DA4C">'last_review'</font>])
+<font color="106391">print</font>(reviews.head())
+													
+<font color="#737373"># Save file as .csv</font>
+reviews.to_csv(<font color="C2DA4C">'path/reviews.csv'</font>, <font color="E088BA">index</font>=<font color="F59829">False</font>)	
+												</code></pre>
+										</ul>
+
+										<p>After that I did quick analyze of data in SQL with questions and code down below:</p>
+									</div>
+
+
+									<h3 class="major">SQL questions</h3>
+
+									<h4>What is the most common room type in NYC Airbnb listings?</h4>
+									<pre><code>
+<b>SELECT</b> room_type, <i>COUNT</i>(room_type)
+<b>FROM</b> room_types
+<b>GROUP BY</b> 1
+<b>ORDER BY</b> 2 <b>DESC</b>
+									</code></pre>
+
+									<h4>What is the average price of a listing by room type(shared room)?</h4>
+									<pre><code>
+<b>SELECT</b> r.room_type, <i>COUNT</i>(r.room_type), <i>AVG</i>(p.price)
+<b>FROM</b> room_types r
+<b>JOIN</b> prices p
+	<b>ON</b> p.listing_id = r.listing_id
+<b>GROUP BY</b> 1
+<b>ORDER BY</b> 2 <b>DESC</b>
+									</code></pre>
+
+									<h4>Which borough has the highest average price per month?</h4>
+									<pre><code>
+<b>SELECT</b> borough, <i>AVG</i>(price_per_month)
+<b>FROM</b> prices
+<b>GROUP BY</b> 1
+<b>ORDER BY</b> 2 <b>DESC</b>									
+									</code></pre>
+
+									<h4>How many listings of each room type are in each borough?</h4>
+									<pre><code>
+<b>SELECT</b> p.borough, r.room_type, <i>COUNT</i>(p.listing_id)
+<b>FROM</b> prices p
+<b>JOIN</b> room_types r
+	<b>ON</b> r.listing_id = p.listing_id
+<b>GROUP BY</b> 1, 2
+<b>ORDER BY</b> 2 <b>DESC</b>											
+									</code></pre>
+
+									<h4>What is the distribution of listing prices by neighborhood?</h4>
+									<pre><code>
+<b>SELECT</b> borough, <i>MIN</i>(price), <i>MAX</i>(price), <i>AVG</i>(price)
+<b>FROM</b> prices
+<b>GROUP BY</b> 1										
+									</code></pre>
+
+									<h4>What is the estimated amount of revenue generated by hosts in each borough?</h4>
+									<pre><code>
+<b>SELECT</b> p.borough, <i>SUM</i>(p.price*r.booked_days_365)
+<b>FROM</b> prices p
+<b>JOIN</b> reviews r
+	<b>ON</b> r.listing_id = p.listing_id
+<b>GROUP BY</b> 1										
+									</code></pre>
+
+									<h4>What is the average price per month for listings in each neighborhood?</h4>
+									<pre><code>
+<b>SELECT</b> p.neighbourhood, r.room_type, <i>AVG</i>(p.price_per_month)
+<b>FROM</b> prices p
+<b>JOIN</b> room_types r
+	<b>ON</b> r.listing_id = p.listing_id
+<b>WHERE</b> p.neighbourhood = 'Sea Gate'
+<b>GROUP BY</b> 1, 2										
+									</code></pre>
+
+									<h4>How many listings have no reviews?</h4>
+									<pre><code>
+<b>SELECT</b> p.listing_id, <i>COUNT</i>(r.listing_id)
+<b>FROM</b> prices p
+<b>JOIN</b> reviews r
+	<b>ON</b> r.listing_id = p.listing_id
+<b>GROUP BY</b> 1
+<b>HAVING</b> <i>COUNT</i>(r.listing_id) = 0
+<b>ORDER BY</b> 2 <b>DESC</b>											
+									</code></pre>
+
+									<h3 class="major">Recommendation</h3>
+
+									<p>I think we can launch; we have a lot of data regarding room types, how they popular where and which are most popular. But nevertheless, we have gap in seasonal trends, we have information only for one year, but for more accurate predictions I recommend to analyze data of two and more years.</p>
+
+									<ul class="actions fit">
+										<li><a href="https://github.com/astronaut707/short-term-rental" class="button primary fit">All files and resourses you can find here</a></li>
+									</ul>
+
+									<section class="features">
+										<article>
+											<a href="metrocar.html" class="image"><img src="images/project4.png" alt="" /></a>
+											<h3 class="major">Metrocar Funnel</h3>
+											<a href="metrocar.html" class="special">Learn more</a>
+										</article>
+										<article>
+											<a href="deforestation.html" class="image"><img src="images/project1.jpeg" alt="" /></a>
+											<h3 class="major">Deforestation Project</h3>
+											<a href="deforestation.html" class="special">Learn more</a>
+										</article>
+										
+									</section>
+							</div>
+
+					</section>
+
+				<!-- Footer -->
+					<section id="footer">
+						<div class="inner">
+							<h2 class="major">Get in touch</h2>
+							<ul class="contact">
+								<li class="icon solid fa-envelope">samshilo7070@gmail.com</li>
+								<li class="icon brands fa-github"><a href="https://github.com/astronaut707">GitHub</a></li>
+								<li class="icon brands fa-linkedin"><a href="https://www.linkedin.com/in/semyon-shilovskii/">LinkedIn</a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; Untitled Inc. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
